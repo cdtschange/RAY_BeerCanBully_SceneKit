@@ -29,6 +29,10 @@ class GameViewController: UIViewController {
   
   let helper = GameHelper()
   
+  
+  // Scene properties
+  var menuScene = SCNScene(named: "resources.scnassets/Menu.scn")!
+  
   // Accessor for the SCNView
   var scnView: SCNView {
     let scnView = view as! SCNView
@@ -40,7 +44,25 @@ class GameViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    presentMenu()
     
+  }
+  
+  // MARK: - Helpers
+  func presentMenu() {
+    let hudNode = menuScene.rootNode.childNode(withName: "hud", recursively: true)!
+    hudNode.geometry?.materials = [helper.menuHUDMaterial]
+    hudNode.rotation = SCNVector4(x: 1, y: 0, z: 0, w: Float(M_PI))
+    
+    helper.state = .tapToPlay
+    
+    let transition = SKTransition.crossFade(withDuration: 1.0)
+    scnView.present(
+      menuScene,
+      with: transition,
+      incomingPointOfView: nil,
+      completionHandler: nil
+    )
   }
   
   // MARK: - Touches
