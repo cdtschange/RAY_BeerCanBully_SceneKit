@@ -33,6 +33,8 @@ class GameViewController: UIViewController {
   // Scene properties
   var menuScene = SCNScene(named: "resources.scnassets/Menu.scn")!
   
+  var levelScene = SCNScene(named: "resources.scnassets/Level.scn")!
+  
   // Accessor for the SCNView
   var scnView: SCNView {
     let scnView = view as! SCNView
@@ -64,11 +66,23 @@ class GameViewController: UIViewController {
       completionHandler: nil
     )
   }
+  func presentLevel() {
+    helper.state = .playing
+    let transition = SKTransition.crossFade(withDuration: 1.0)
+    scnView.present(
+      levelScene,
+      with: transition,
+      incomingPointOfView: nil,
+      completionHandler: nil
+    )
+  }
   
   // MARK: - Touches
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesBegan(touches, with: event)
-    
+    if helper.state == .tapToPlay {
+      presentLevel()
+    }
   }
   
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
